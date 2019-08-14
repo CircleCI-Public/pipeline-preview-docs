@@ -6,3 +6,5 @@ The documentation here is currently only a preview. You may use it at will, but 
 Use of the features herein as long as this notice is in the master branch (current as of August 2019) is done at your own risk and is governed by CircleCI’s Terms of Service.
 
 PREVIEWS ARE PROVIDED "AS-IS," "WITH ALL FAULTS," AND "AS AVAILABLE," AND ARE EXCLUDED FROM THE SERVICE LEVEL AGREEMENTS AND LIMITED WARRANTY. Previews may not be covered by customer support. Previews may be subject to reduced or different security, compliance and privacy commitments, as further explained in the Terms of Service, Privacy Policy and any additional notices provided with the Preview. We may change or discontinue Previews at any time without notice. We also may choose not to release a Preview into "General Availability."
+
+[See the docs in this repo](./docs)
