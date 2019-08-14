@@ -5,5 +5,7 @@
 * [List of available pipeline variables](pipeline_variables_reference.md)
 
 
+These docs are published to: <https://circleci-public.github.io/pipeline-vars-preview-docs/>
+
 ## Feedback
 Direct feedback to Issues on the GitHub repo: https://github.com/CircleCI-Public/pipeline-preview-docs
