@@ -8,4 +8,4 @@
 These docs are published to: <https://circleci-public.github.io/pipeline-preview-docs/>
 
 ## Feedback
-Direct feedback to Issues on the GitHub repo: https://github.com/CircleCI-Public/pipeline-preview-docs
+Direct feedback to Issues on the GitHub repo: <https://github.com/CircleCI-Public/pipeline-preview-docs>
