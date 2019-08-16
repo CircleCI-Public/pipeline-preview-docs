@@ -7,4 +7,5 @@ Use of the features herein as long as this notice is in the master branch (curre
 
 PREVIEWS ARE PROVIDED "AS-IS," "WITH ALL FAULTS," AND "AS AVAILABLE," AND ARE EXCLUDED FROM THE SERVICE LEVEL AGREEMENTS AND LIMITED WARRANTY. Previews may not be covered by customer support. Previews may be subject to reduced or different security, compliance and privacy commitments, as further explained in the Terms of Service, Privacy Policy and any additional notices provided with the Preview. We may change or discontinue Previews at any time without notice. We also may choose not to release a Preview into "General Availability."
 
-[See the docs in this repo](./docs)
+[See the docs (rendered as HTML)](https://circleci-public.github.io/pipeline-preview-docs/)
+[See the docs (markdown in this repo)](./docs)
