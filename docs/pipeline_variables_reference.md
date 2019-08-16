@@ -26,10 +26,13 @@ pipeline.trigger.begin_sha
 Other potential variables:
 ```
 pipeline.pull_request.draft (boolean)
+pipeline.pull_request.number
+pipeline.pull_request.url
 pipeline.pull_request.source_branch
 pipeline.pull_request.source_repo
 pipeline.pull_request.target_branch
 pipeline.pull_request.target_repo
+pipeline.pull_request.fork (boolean - useful, or should we prefer comparing source/target?)
 
 pipeline.project.default_branch
 pipeline.project.repo_name
