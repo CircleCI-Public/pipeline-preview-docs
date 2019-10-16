@@ -1,6 +1,6 @@
 ## Available pipeline variables
 
-For information on how these pipeline variables would be used in your configuration see [the overview of pipline variables](pipeline_variables_overview.md).
+For information on how these pipeline variables would be used in your configuration see [the overview of pipeline variables](pipeline_variables_overview.md).
 
 
 (THIS LIST IS UNDER DESIGN - FEEDBACK WELCOMED.)
