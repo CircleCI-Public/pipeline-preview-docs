@@ -16,4 +16,15 @@ jobs:
     ...
 ```
 
+
+And here's how you can get the `CIRCLE_COMPARE_URL` in v2.1:
+
+```
+version: 2.1
+jobs:
+  my-job:
+    environment:
+      CIRCLE_COMPARE_URL: << pipeline.project.git_url >>/compare/<< pipeline.git.base_revision >>..<<pipeline.git.revision>>
+```
+
 Next step: review [the list of available pipeline variables](pipeline_variables_reference.md)
