@@ -1,0 +1,41 @@
+orbs:
+  foo:
+    jobs:
+      foo:
+        executor: default
+        steps:
+          - run: echo "I am foo"
+      bar:
+        executor: default
+        steps:
+          - run: echo "I am bar"
+    workflows:
+      default:
+        parameters:
+          deploy:
+            type: boolean
+            default: false
+        jobs:
+          - foo:
+              deploy: << parameters.deploy >>
+          - when:
+              condition: << parameters.deploy >>
+              jobs:
+                - bar
+
+# if the value of the workflow is a string it's assumed to be an invocation.
+# if the value is a collection it's assumed to be a parameterized invocation.
+# 
+# QUESTION: can you invoke locally declared workflows? If not, that's different
+# than jobs and commands, which could be odd.
+#
+
+workflows:
+  foobar: foo/default
+  with-params:
+    foo/default:
+      deploy: true
+
+
+
+
