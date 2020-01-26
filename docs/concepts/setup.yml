@@ -1,0 +1,69 @@
+# CAVEAT EMPTOR
+# THIS IS A FIRST SKETCH TO STIMULATE DISCUSSION.
+# THIS IS NOT A DESIGN WE ARE IMPLEMENTING YET.
+# WE HAVE NOT YET GREEN-LIT SETUP JOBS AS AN INITIATIVE.
+
+# `setup` stanza
+# the setup stanza would run before pipeline.parameter resolution (before
+# `orbs` stanza resolution).
+setup:
+  # `orbs` stanza inside setup.
+  # setup has its own orbs because we need to resolve pipeline parameters
+  # to resolve orbs, and setup can set pipeline parameters
+  # this also means we _could_ defer this and not allow any orb resolution,
+  # but that will be sad-making.
+  #
+  # In a world where `setup` can only be run in a project-level configuration
+  # (which would make them very powerful)
+  orbs:
+    # orbs in setup stanza should not allow pipeline.parameter resolution
+    global: myns/myorb@1.2.3
+    # use a local orb here to create a job in a closed scope
+    local:
+      jobs:
+        setup:
+          # this is a fantasy where `circleci` is implicitly available, and we
+          # have a nice setup image we maintain.
+          executor: circleci/setup@volatile
+          steps:
+            # there are lots of situations where people want to look at code,
+            # but in many others they really just want nice access to the trigger
+            # metata - we should think about exposing it first-class to jobs.
+            - checkout
+            - # some arbitrary work here that calls build agent
+            # NOTE THAT WE WILL WANT TO LIKELY USE BUILD-AGENT TO USE APIs to
+            # * set parameters on this pipeline
+            # * be able to cleanly exit the pipeline as a no-op
+            # * be able to set the config to use on the pipeline after the pipeline was
+            #   created (and only during setup)
+  # `jobs` invocations during setup
+  # this implies that under `setup` jobs is a list of jobs to run. Would
+  # we let you resolve only local jobs but not orb jobs in setup?
+  # Is there too much cognitive dissonance for `jobs` to be a list of
+  # invoked jobs here but a map of declared jobs in the root of config?
+  jobs:
+    - global/setup
+    # this implies setup will invoke jobs in the scope of the pipeline, but
+    # those jobs will dereference
+    - local/setup
+
+
+  # speculative concept: `environment` stanza inside setup
+  # we have talked for a while about wanting a pipeline-level environment.
+  # We could choose to make that part of setup, so it's more explicitly
+  # upstream from the running of the work in the pipeline itself.
+  environment:
+    SOME_GLOBAL_VAR: "some_cool_value"
+
+parameters:
+  env:
+    type: enum
+    enum: ['dev', 'staging', 'prod']
+    default: "dev"
+    # this `mutability` key probably needs a better name, but the premise is
+    # that I may want to have a parameter I can set from my setup jobs but
+    # that I don't want to be passed in from an API trigger. We have also
+    # talked about a `locals` stanza instead of introducing this notion of
+    # mutability, which might be cleaner, but it's more DSL surface area.
+    mutability: internal
+
