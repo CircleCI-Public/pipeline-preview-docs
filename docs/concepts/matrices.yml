@@ -63,27 +63,27 @@ workflows:
       - test:
           name: test-on-linux-with-node-6
           os: linux
-          node-version: 6
+          node_version: 6
           run_integration_tests: true
       - test:
           name: test-on-linux-with-node-8
           os: linux
-          node-version: 8
+          node_version: 8
           run_integration_tests: true
       - test:
           name: test-on-linux-with-node-10
           os: linux
-          node-version: 10
+          node_version: 10
           run_integration_tests: true
       - test:
           name: test-on-macos-with-node-8
           os: macos
-          node-version: 8
+          node_version: 8
           run_integration_tests: true
       - test:
           name: test-on-macos-with-node-10
           os: macos
-          node-version: 10
+          node_version: 10
       - deploy:
           requires:
             - test-on-linux-with-node-6
