@@ -1,0 +1,104 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@1.1.6
+
+executors:
+  linux:
+    docker:
+      - image: ubuntu@16.04
+  macos:
+    macos:
+      xcode: 11
+
+# Matrices work with jobs that take parameters
+jobs:
+  test:
+    parameters:
+      os:
+        type: string
+      node_version:
+        type: integer
+      run_integration_tests:
+        type: boolean
+    executor: << parameters.os >>
+    steps:
+      - node/install:
+          node-version: << parameters.node_version >>
+      - ...
+      - yarn test
+      - ...
+
+workflows:
+  build:
+    jobs:
+      # A "matrix" here is essentially syntactic sugar for invoking a certain
+      # job many times with different combinations of parameters.
+      - test:
+          # The "matrix" block signifies that this job should be expanded into a
+          # series of jobs, each with a different combination of parameter values
+          matrix:
+            parameters:
+              os: [linux, macos]        # <-- YAML shorthand for lists of values
+              node_version: [6, 8, 10]
+            # Exclude certain combinations we don't want to test
+            exclude:
+              - os: macos
+                node_version: 6
+            # By default each job will be suffixed with "-<< parameter.1 >>-<< parameter.2 >>-..."
+            # to avoid collisions, but you can optionally change the naming scheme
+            job_name: test-on-<< parameters.os >>-with-node-<< parameters.node-version >>
+          # Any parameter values expressed outside the "matrix" block will be
+          # passed through to each invocation
+          run_integration_tests: true
+      - deploy:
+          requires:
+            # This job won't start until every job in the `test` matrix passes
+            - test
+
+# The above config is equivalent to invoking the jobs explicitly like so:
+workflows:
+  build:
+    jobs:
+      - test:
+          name: test-on-linux-with-node-6
+          os: linux
+          node-version: 6
+          run_integration_tests: true
+      - test:
+          name: test-on-linux-with-node-8
+          os: linux
+          node-version: 8
+          run_integration_tests: true
+      - test:
+          name: test-on-linux-with-node-10
+          os: linux
+          node-version: 10
+          run_integration_tests: true
+      - test:
+          name: test-on-macos-with-node-8
+          os: macos
+          node-version: 8
+          run_integration_tests: true
+      - test:
+          name: test-on-macos-with-node-10
+          os: macos
+          node-version: 10
+      - deploy:
+          requires:
+            - test-on-linux-with-node-6
+            - test-on-linux-with-node-8
+            - test-on-linux-with-node-10
+            - test-on-macos-with-node-8
+            - test-on-macos-with-node-10
+
+# You can also call orb jobs in a matrix
+orbs:
+  myorb: extremely_awesome_orb@1000.23.40
+
+workflows:
+  very_cool_theoretical_example:
+    jobs:
+      - myorb/job:
+          matrix:
+            ...
