@@ -38,6 +38,9 @@ workflows:
           # The "matrix" block signifies that this job should be expanded into a
           # series of jobs, each with a different combination of parameter values
           matrix:
+            # The matrix alias is implicitly the name of the job you are matrixifying.
+            # Explicitly specifying an alias is only necessary if that becomes ambiguous.
+            alias: test
             parameters:
               os: [linux, macos]        # <-- YAML shorthand for lists of values
               node_version: [6, 8, 10]
@@ -47,7 +50,9 @@ workflows:
                 node_version: 6
             # By default each job will be suffixed with "-<< parameter.1 >>-<< parameter.2 >>-..."
             # to avoid collisions, but you can optionally change the naming scheme
-            job_name: test-on-<< parameters.os >>-with-node-<< parameters.node-version >>
+          name: test-on-<< matrix.os >>-with-node-<< matrix.node-version >>
+          requires:
+            - build-<< matrix.os >>
           # Any parameter values expressed outside the "matrix" block will be
           # passed through to each invocation
           run_integration_tests: true
