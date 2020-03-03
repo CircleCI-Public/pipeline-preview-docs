@@ -1,5 +1,7 @@
 version: 2.1
 
+## EXAMPLE 1: I want to test my nodejs project on every version of node and operating system.
+## Then, if all tests pass, I want to deploy my project.
 orbs:
   node: circleci/node@1.1.6
 
@@ -45,15 +47,15 @@ workflows:
             exclude:
               - os: macos
                 node_version: 6
-            # By default each job will be suffixed with "-<< parameter.1 >>-<< parameter.2 >>-..."
-            # to avoid collisions, but you can optionally change the naming scheme
-            job_name: test-on-<< parameters.os >>-with-node-<< parameters.node-version >>
-          # Any parameter values expressed outside the "matrix" block will be
-          # passed through to each invocation
+          # By default each job will be suffixed with "-<< param-1 >>-<< param-2 >>-..."
+          # to avoid collisions, but you can optionally change the naming scheme
+          name: test-on-<< matrix.os >>-with-node-<< matrix.node-version >>
+          # Any other parameter values expressed here will be passed through to
+          # each invocation
           run_integration_tests: true
       - deploy:
           requires:
-            # This job won't start until every job in the `test` matrix passes
+            # `deploy` won't start until every job in the `test` matrix passes
             - test
 
 # The above config is equivalent to invoking the jobs explicitly like so:
@@ -92,12 +94,36 @@ workflows:
             - test-on-macos-with-node-8
             - test-on-macos-with-node-10
 
-# You can also call orb jobs in a matrix
+## EXAMPLE 2: I want to build AND test a project across a matrix of environments.
+## (accomplished with two matrices and templated dependencies between jobs)
+workflows:
+
+  build:
+    jobs:
+      - build:
+          matrix:
+            parameters:
+              os: [linux, macos]
+              node_version: [6, 8, 10]
+          name: build-<< matrix.os >>-<< matrix.node_version >>
+      - test:
+          matrix:
+            parameters:
+              os: [linux, macos]
+              node_version: [6, 8, 10]
+          name: test-<< matrix.os >>-<< matrix.node_version >>
+          # Templated dependency:
+          # "Each `test` job depends on its corresponding `build` job"
+          requires:
+            - build-<< matrix.os >>-<< matrix.node_version >>
+
+
+## EXAMPLE 3: I want to call an orb's job in a matrix.
 orbs:
   myorb: extremely_awesome_orb@1000.23.40
 
 workflows:
-  very_cool_theoretical_example:
+  build:
     jobs:
       - myorb/job:
           matrix:
